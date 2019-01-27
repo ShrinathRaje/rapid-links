@@ -1,0 +1,17 @@
+body {
+    min-width: 300px;
+}
+
+.container {
+    width: 90%;
+    margin: auto;
+}
+
+.link-field {
+    border: 1px solid black;
+    margin: 10px 0;
+}
+
+button {
+    display: none;
+}
