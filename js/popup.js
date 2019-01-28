@@ -1,10 +1,5 @@
 const numberOfRapidLinks = 3;
-
-// chrome.storage.sync.set({
-//     url1: { url: "https://www.google.com", newTab: true },
-//     url2: { url: "https://www.facebook.com", newTab: false },
-//     url3: { url: "", newTab: false }
-// }, function () { });
+const emptyUrlPlaceholder = "Enter URL, e.g: www.example.com";
 
 function initialize() {
 
@@ -16,11 +11,12 @@ function initialize() {
             const url = 'url' + (i + 1);
             const link = document.getElementById(url);
 
-            const storedUrl = result['' + list[i]].url;
-            const newTab = result['' + list[i]].newTab;
+            const storedUrl = result[list[i]].url;
+            const newTab = result[list[i]].newTab;
 
             if (storedUrl != "") {
                 link.value = storedUrl;
+                link.readOnly = true;
 
                 if (newTab)
                     document.getElementById(url + '-yes').checked = true;
@@ -31,7 +27,8 @@ function initialize() {
                 document.getElementById(url + '-delete').style.display = "inline-block";
 
             } else {
-                link.value = "Enter URL, e.g: www.example.com";
+                link.readOnly = false;
+                link.placeholder = emptyUrlPlaceholder;
                 document.getElementById(url + '-add').style.display = "inline-block";
             }
         }
@@ -44,6 +41,9 @@ function initialize() {
         document.getElementById(url + '-add').addEventListener('click', add);
         document.getElementById(url + '-cancel').addEventListener('click', cancel);
         document.getElementById(url + '-delete').addEventListener('click', deleteUrl);
+
+        document.getElementById(url + '-yes').addEventListener('click', setNewTabValue);
+        document.getElementById(url + '-no').addEventListener('click', setNewTabValue);
     }
 }
 
@@ -60,6 +60,7 @@ function handleButtons(id, context) {
             deleteUrl.style.display = "none";
             save.style.display = "inline-block";
             cancel.style.display = "inline-block";
+            document.getElementById(id).readOnly = false;
             break;
 
         case 'save':
@@ -68,12 +69,14 @@ function handleButtons(id, context) {
             deleteUrl.style.display = "inline-block";
             save.style.display = "none";
             cancel.style.display = "none";
+            document.getElementById(id).readOnly = true;
             break;
 
         case 'delete':
             update.style.display = "none";
             deleteUrl.style.display = "none";
             add.style.display = "inline-block";
+            document.getElementById(id).readOnly = false;
             break;
 
         case 'cancel-add':
@@ -89,10 +92,10 @@ function validateUrl(str) {
     return regexp.test(str);
 }
 
-//event listeners
 function update(event) {
     const id = event.target.id.substring(0, 4);
-    document.getElementById(id + '-form').reset();
+    document.getElementById(id).value = "";
+    document.getElementById(id).placeholder = emptyUrlPlaceholder;
     document.getElementById(id).focus();
     handleButtons(id, 'update');
 }
@@ -100,18 +103,18 @@ function update(event) {
 function cancel(event) {
     const id = event.target.id.substring(0, 4);
 
-    chrome.storage.sync.get(['' + id], function (result) {
-        //console.log(result[`${id}`]);
-        const link = result[`` + id].url;
+    chrome.storage.sync.get([id], function (result) {
+        const link = result[id].url;
         if (link != "") {
             document.getElementById(id).value = link;
             handleButtons(id, 'cancel');
         } else {
-            document.getElementById(id).value = "Enter URL, e.g: www.example.com";
+            document.getElementById(id).value = "";
+            document.getElementById(id).placeholder = emptyUrlPlaceholder;
             handleButtons(id, 'cancel-add');
         }
 
-        if (result['' + id].newTab)
+        if (result[id].newTab)
             document.getElementById(id + '-yes').checked = true;
         else
             document.getElementById(id + '-no').checked = true;
@@ -126,14 +129,13 @@ function save(event) {
         link = 'http://' + link;
 
     if (!validateUrl(link)) {
-        //console.log('invalid');
+        document.getElementById(id).value = "";
         cancel(event);
         return;
     }
 
     const newUrl = {};
     newUrl[id] = { url: link, newTab: document.getElementById(id + '-yes').checked };
-    //console.log(newUrl);
     chrome.storage.sync.set(newUrl, function () {
 
     });
@@ -156,10 +158,27 @@ function deleteUrl(event) {
 
     });
 
-    document.getElementById(id).value = "Enter URL, e.g: www.example.com";
+    document.getElementById(id).value = "";
+    document.getElementById(id).placeholder = emptyUrlPlaceholder;
     document.getElementById(id + '-no').checked = true;
 
     handleButtons(id, 'delete');
+}
+
+function setNewTabValue(event) {
+    const id = event.target.id.substring(0, 4);
+    const yesOrNo = event.target.id.substring(5);
+
+    chrome.storage.sync.get([id], function (result) {
+        if (yesOrNo === "yes")
+            result[id].newTab = true;
+        else
+            result[id].newTab = false;
+
+        chrome.storage.sync.set(result, function () {
+
+        });
+    });
 }
 
 initialize();
