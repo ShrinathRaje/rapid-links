@@ -14,6 +14,36 @@
         "default_title": "Launch websites with keyboard shortcuts"
     },
     "permissions": [
-        "storage"
-    ]
+        "storage",
+        "tabs"
+    ],
+    "background": {
+        "scripts": [
+            "js/background.js"
+        ],
+        "persistent": false
+    },
+    "commands": {
+        "launchFirstUrl": {
+            "suggested_key": {
+                "default": "Alt+V",
+                "mac": "Alt+V"
+            },
+            "description": "Launch the first URL stored in chrome storage on pressing ALT+V"
+        },
+        "launchSecondUrl": {
+            "suggested_key": {
+                "default": "Alt+B",
+                "mac": "Alt+B"
+            },
+            "description": "Launch the second URL stored in chrome storage on pressing ALT+B"
+        },
+        "launchThirdUrl": {
+            "suggested_key": {
+                "default": "Alt+N",
+                "mac": "Alt+N"
+            },
+            "description": "Launch the third URL stored in chrome storage on pressing ALT+N"
+        }
+    }
 }
