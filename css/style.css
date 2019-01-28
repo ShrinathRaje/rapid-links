@@ -1,17 +1,79 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
 body {
-    min-width: 300px;
+    font-family: 'Open Sans', sans-serif;
+    text-align: center;
+    font-size: 16px;
+    min-width: 350px;
+    background-color: #F7F7F7;
 }
 
 .container {
-    width: 90%;
+    width: 95%;
     margin: auto;
 }
 
+#main-heading {
+    color: red;
+    margin-bottom: 0;
+}
+
 .link-field {
-    border: 1px solid black;
-    margin: 10px 0;
+    margin: 15px 0;
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 15px;
+    box-shadow: 5px 5px 10px #ccc;
+}
+
+.link-field:hover {
+    box-shadow: 2px 2px 5px #ccc;
+}
+
+kbd {
+    display: inline-block;
+    background-color: rgba(0,0,0, 0.075);
+    padding: 0.2rem;
+    border: 1px solid darkgray;
+    border-radius: 5px;
+}
+
+.link-field span {
+    display: inline-block;
+}
+
+.link-field input[type="url"] {
+    color: rgba(0,0,0,0.8);
+    width: 70%;
+    min-height: 20px;
+    margin: 5px;
 }
 
 button {
     display: none;
+    margin: 5px;
+}
+
+button.positive, button.negative {
+    border: none;
+    padding: 5px;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+}
+
+button.positive {
+    background-color: green;
+}
+
+button.positive:hover {
+    background-color: darkgreen;
+}
+
+button.negative {
+    background-color: red;
+}
+
+button.negative:hover {
+    background-color: darkred;
 }
