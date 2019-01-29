@@ -158,7 +158,10 @@ function save(event) {
 function add(event) {
     const id = event.target.id.substring(0, 4);
     document.getElementById(id + '-add').style.display = "none";
-    update(event);
+    if (document.getElementById(id).value === "")
+        update(event);
+    else
+        save(event);
 }
 
 function deleteUrl(event) {
