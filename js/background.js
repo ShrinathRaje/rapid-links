@@ -1,6 +1,6 @@
 function launchUrl(request, n) {
     var link = request['url' + n];
-
+    /* if url field is not set, just ignore the launch request */
     if (link.url != "") {
         if (link.newTab) {
             chrome.tabs.create({ url: link.url });
@@ -10,6 +10,8 @@ function launchUrl(request, n) {
     }
 }
 
+/* one time initialization */
+/* set empty fields with most visited websites */
 chrome.runtime.onInstalled.addListener(function () {
     chrome.storage.sync.set({
         url1: { url: "https://www.google.com/", newTab: false },
@@ -18,6 +20,7 @@ chrome.runtime.onInstalled.addListener(function () {
     }, function () { });
 });
 
+/* listen to commands from the keyboard */
 chrome.commands.onCommand.addListener(function (command) {
     switch (command) {
         case "launchFirstUrl":

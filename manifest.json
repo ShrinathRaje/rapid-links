@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
-    "name": "RapidLinks",
-    "description": "Quickly launch your favorite websites with keyboard shortcuts",
+    "name": "Rapid Links",
+    "description": "Quickly launch your favorite websites or URLs using keyboard shortcuts",
     "version": "1.0",
     "icons": {
         "128": "icons/icon128.png",
@@ -11,7 +11,7 @@
     "browser_action": {
         "default_popup": "popup.html",
         "default_icon": "icons/icon16.png",
-        "default_title": "Launch websites with keyboard shortcuts"
+        "default_title": "Launch URLs with keyboard shortcuts"
     },
     "permissions": [
         "storage",

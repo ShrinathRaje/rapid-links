@@ -1,8 +1,11 @@
 const numberOfRapidLinks = 3;
 const emptyUrlPlaceholder = "Enter URL, e.g: www.example.com";
 
+/*populate the url fields with values stored in the chrome storage */
+/*add event listeners to all the buttons and input fields like radio buttons */
 function initialize() {
 
+    /* get all three stored urls which are guaranteed to be not empty at least on the first run of the extension */
     chrome.storage.sync.get(['url1', 'url2', 'url3'], function (result) {
 
         const list = Object.keys(result);
@@ -18,10 +21,7 @@ function initialize() {
                 link.value = storedUrl;
                 link.readOnly = true;
 
-                if (newTab)
-                    document.getElementById(url + '-yes').checked = true;
-                else
-                    document.getElementById(url + '-no').checked = true;
+                checkNewTabButton(url, newTab);
 
                 document.getElementById(url + '-update').style.display = "inline-block";
                 document.getElementById(url + '-delete').style.display = "inline-block";
@@ -35,6 +35,7 @@ function initialize() {
         }
     });
 
+    /* add event listeners */
     for (let i = 0; i < numberOfRapidLinks; ++i) {
         const url = 'url' + (i + 1);
         document.getElementById(url + '-update').addEventListener('click', update);
@@ -48,6 +49,7 @@ function initialize() {
     }
 }
 
+/* handle buttons depending on the context of the program */
 function handleButtons(id, context) {
     const save = document.getElementById(id + '-save');
     const update = document.getElementById(id + '-update');
@@ -91,20 +93,25 @@ function handleButtons(id, context) {
     }
 }
 
+/* validate the url using regex */
 function validateUrl(str) {
     const regexp = new RegExp(/^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/);
 
     return regexp.test(str);
 }
 
+/* update the url field */
 function update(event) {
     const id = event.target.id.substring(0, 4);
-    document.getElementById(id).value = "";
-    document.getElementById(id).placeholder = emptyUrlPlaceholder;
-    document.getElementById(id).focus();
+    const url = document.getElementById(id);
+
+    url.value = "";
+    url.placeholder = emptyUrlPlaceholder;
+    url.focus();
     handleButtons(id, 'update');
 }
 
+/* cancel the current operation and set the url field to it's previous value */
 function cancel(event) {
     const id = event.target.id.substring(0, 4);
 
@@ -114,18 +121,18 @@ function cancel(event) {
             document.getElementById(id).value = link;
             handleButtons(id, 'cancel');
         } else {
-            document.getElementById(id).value = "";
-            document.getElementById(id).placeholder = emptyUrlPlaceholder;
+            const url = document.getElementById(id);
+
+            url.value = "";
+            url.placeholder = emptyUrlPlaceholder;
             handleButtons(id, 'cancel-add');
         }
 
-        if (result[id].newTab)
-            document.getElementById(id + '-yes').checked = true;
-        else
-            document.getElementById(id + '-no').checked = true;
+        checkNewTabButton(id, result[id].newTab);
     });
 }
 
+/* validate and save entered urls */
 function save(event) {
     const id = event.target.id.substring(0, 4);
     var link = document.getElementById(id).value;
@@ -136,6 +143,7 @@ function save(event) {
         return;
     }
 
+    /* lets you enter urls without typing http or https */
     if (!link.includes('http'))
         link = 'http://' + link;
 
@@ -155,32 +163,44 @@ function save(event) {
     handleButtons(id, 'save');
 }
 
+/* add new urls */
 function add(event) {
     const id = event.target.id.substring(0, 4);
     document.getElementById(id + '-add').style.display = "none";
+
     if (document.getElementById(id).value === "")
         update(event);
     else
         save(event);
 }
 
+/* set the url to empty string in the chrome storage */
 function deleteUrl(event) {
     const id = event.target.id.substring(0, 4);
 
     const newUrl = {};
     newUrl[id] = { url: "", newTab: false };
     chrome.storage.sync.set(newUrl, function () {
-
+        handleMessages('success: url deleted', 0);
     });
 
-    document.getElementById(id).value = "";
-    document.getElementById(id).placeholder = emptyUrlPlaceholder;
+    const urlField = document.getElementById(id);
+    urlField.value = "";
+    urlField.placeholder = emptyUrlPlaceholder;
     document.getElementById(id + '-no').checked = true;
 
     handleButtons(id, 'delete');
-    handleMessages('success: url deleted', 0);
 }
 
+/* set radio buttons depending on the value retrieved from the chrome storage */
+function checkNewTabButton(id, val) {
+    if (val)
+        document.getElementById(id + '-yes').checked = true;
+    else
+        document.getElementById(id + '-no').checked = true;
+}
+
+/* lets you alter radio button values on the go without hitting any buttons */
 function setNewTabValue(event) {
     const id = event.target.id.substring(0, 4);
     const yesOrNo = event.target.id.substring(5);
@@ -205,14 +225,16 @@ function setNewTabValue(event) {
     });
 }
 
+/* notify user with related and helpful messages */
 function handleMessages(str, success) {
     const message = document.getElementById('message');
     message.textContent = str;
     message.style.color = success ? "#ff0000" : "#006400";
 
+    /* end the message after 2 seconds */
     setTimeout(function () {
         message.textContent = "";
     }, 2000);
 }
 
-initialize();
+initialize(); //let the game begin

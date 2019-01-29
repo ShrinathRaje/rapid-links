@@ -42,7 +42,7 @@ kbd {
     display: inline-block;
     background-color: rgba(0,0,0, 0.075);
     padding: 0.2rem;
-    border: 1px solid darkgray;
+    border: 1px solid #a9a9a9;
     border-radius: 5px;
 }
 
@@ -66,12 +66,12 @@ button.positive, button.negative {
     border: none;
     padding: 5px;
     border-radius: 5px;
-    color: white;
+    color: #ffffff;
     font-weight: bold;
 }
 
 button.positive {
-    background-color: green;
+    background-color: #008000;
 }
 
 button.positive:hover {
@@ -79,9 +79,9 @@ button.positive:hover {
 }
 
 button.negative {
-    background-color: red;
+    background-color: #ff0000;
 }
 
 button.negative:hover {
-    background-color: darkred;
+    background-color: #8b0000;
 }
