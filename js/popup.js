@@ -30,6 +30,7 @@ function initialize() {
                 link.readOnly = false;
                 link.placeholder = emptyUrlPlaceholder;
                 document.getElementById(url + '-add').style.display = "inline-block";
+                document.getElementById(url + '-form').style.display = "none";
             }
         }
     });
@@ -60,6 +61,7 @@ function handleButtons(id, context) {
             deleteUrl.style.display = "none";
             save.style.display = "inline-block";
             cancel.style.display = "inline-block";
+            document.getElementById(id + '-form').style.display = "block";
             document.getElementById(id).readOnly = false;
             break;
 
@@ -69,6 +71,7 @@ function handleButtons(id, context) {
             deleteUrl.style.display = "inline-block";
             save.style.display = "none";
             cancel.style.display = "none";
+            document.getElementById(id + '-form').style.display = "block";
             document.getElementById(id).readOnly = true;
             break;
 
@@ -76,6 +79,7 @@ function handleButtons(id, context) {
             update.style.display = "none";
             deleteUrl.style.display = "none";
             add.style.display = "inline-block";
+            document.getElementById(id + '-form').style.display = "none";
             document.getElementById(id).readOnly = false;
             break;
 
@@ -83,6 +87,7 @@ function handleButtons(id, context) {
             save.style.display = "none";
             cancel.style.display = "none";
             add.style.display = "inline-block";
+            document.getElementById(id + '-form').style.display = "none";
     }
 }
 
@@ -178,13 +183,21 @@ function setNewTabValue(event) {
     const yesOrNo = event.target.id.substring(5);
 
     chrome.storage.sync.get([id], function (result) {
+        if (result[id].url === "") {
+            handleMessages('error: no url saved', 1);
+            return;
+        }
+
         if (yesOrNo === "yes")
             result[id].newTab = true;
         else
             result[id].newTab = false;
 
         chrome.storage.sync.set(result, function () {
-            handleMessages('success: settings saved', 0);
+            if (result[id].newTab)
+                handleMessages('success: open in new tab', 0);
+            else
+                handleMessages('success: do not open in new tab');
         });
     });
 }
