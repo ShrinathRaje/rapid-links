@@ -125,19 +125,26 @@ function save(event) {
     const id = event.target.id.substring(0, 4);
     var link = document.getElementById(id).value;
 
+    if (link === "") {
+        cancel(event);
+        handleMessages('error: empty url', 1);
+        return;
+    }
+
     if (!link.includes('http'))
         link = 'http://' + link;
 
     if (!validateUrl(link)) {
         document.getElementById(id).value = "";
         cancel(event);
+        handleMessages('error: invalid url', 1);
         return;
     }
 
     const newUrl = {};
     newUrl[id] = { url: link, newTab: document.getElementById(id + '-yes').checked };
     chrome.storage.sync.set(newUrl, function () {
-
+        handleMessages('success: url saved', 0);
     });
 
     handleButtons(id, 'save');
@@ -163,6 +170,7 @@ function deleteUrl(event) {
     document.getElementById(id + '-no').checked = true;
 
     handleButtons(id, 'delete');
+    handleMessages('success: url deleted', 0);
 }
 
 function setNewTabValue(event) {
@@ -176,9 +184,19 @@ function setNewTabValue(event) {
             result[id].newTab = false;
 
         chrome.storage.sync.set(result, function () {
-
+            handleMessages('success: settings saved', 0);
         });
     });
+}
+
+function handleMessages(str, success) {
+    const message = document.getElementById('message');
+    message.textContent = str;
+    message.style.color = success ? "#ff0000" : "#006400";
+
+    setTimeout(function () {
+        message.textContent = "";
+    }, 2000);
 }
 
 initialize();

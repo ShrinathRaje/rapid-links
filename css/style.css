@@ -14,8 +14,16 @@ body {
 }
 
 #main-heading {
-    color: red;
+    color: #ff0000;
     margin-bottom: 0;
+    border-bottom: 2px solid #8b0000;
+}
+
+#message {
+    display: inline-block;
+    margin-top: 10px;
+    margin-bottom: 0;
+    font-weight: bold;
 }
 
 .link-field {
@@ -67,7 +75,7 @@ button.positive {
 }
 
 button.positive:hover {
-    background-color: darkgreen;
+    background-color: #006400;
 }
 
 button.negative {
