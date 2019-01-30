@@ -46,6 +46,8 @@ function initialize() {
 
         document.getElementById(url + '-yes').addEventListener('click', setNewTabValue);
         document.getElementById(url + '-no').addEventListener('click', setNewTabValue);
+
+        document.getElementById(url).addEventListener('keypress', handleKeyPress);
     }
 }
 
@@ -235,6 +237,22 @@ function handleMessages(str, success) {
     setTimeout(function () {
         message.textContent = "";
     }, 2000);
+}
+
+/* let's you save or add url's on pressing enter key */
+function handleKeyPress(event) {
+    //check if enter key was hit
+    if (event.which === 13) {
+        const id = event.target.id;
+
+        const saveButton = document.getElementById(id + '-save');
+        const addButton = document.getElementById(id + '-add');
+
+        if (saveButton.style.display === "inline-block")
+            saveButton.click();
+        else
+            addButton.click();
+    }
 }
 
 initialize(); //let the game begin
