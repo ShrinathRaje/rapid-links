@@ -16,7 +16,8 @@ chrome.runtime.onInstalled.addListener(function () {
     chrome.storage.sync.set({
         url1: { url: "https://www.google.com/", newTab: false },
         url2: { url: "https://www.youtube.com/", newTab: false },
-        url3: { url: "https://www.facebook.com/", newTab: false }
+        url3: { url: "https://www.facebook.com/", newTab: false },
+        showTutorial: true
     }, function () { });
 });
 

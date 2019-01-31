@@ -49,6 +49,31 @@ function initialize() {
 
         document.getElementById(url).addEventListener('keyup', handleKeyPress);
     }
+
+    /* handle tutorial popup */
+    chrome.storage.sync.get(['showTutorial'], function (result) {
+        if (result.showTutorial) {
+            const tutorialPopup = document.createElement('div');
+            tutorialPopup.setAttribute('id', 'tutorialPopup');
+
+            tutorialPopup.innerHTML = '<h2>Welcome!</h2>' +
+                '<p><b>Press and Hold</b> <kbd>Alt</kbd> key, then, <b>Press and immediately Release</b>' +
+                "<kbd> 'V' </kbd> key to launch your firstmost favorite website.</p>" +
+                '<input type="checkbox" id="tutorialCheckbox"> <label for="tutorialCheckbox">' +
+                'Do not show this again</label>' +
+                '<button id="tutorialButton">X</button>';
+
+            document.querySelector('.container').appendChild(tutorialPopup);
+
+            document.getElementById('tutorialButton').addEventListener('click', function () {
+                if (document.getElementById('tutorialCheckbox').checked) {
+                    chrome.storage.sync.set({ showTutorial: false }, function () { });
+                }
+
+                tutorialPopup.remove();
+            });
+        }
+    });
 }
 
 /* handle buttons depending on the context of the program */

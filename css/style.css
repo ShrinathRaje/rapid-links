@@ -9,6 +9,7 @@ body {
 }
 
 .container {
+    position: relative;
     width: 95%;
     margin: auto;
 }
@@ -84,4 +85,41 @@ button.negative {
 
 button.negative:hover {
     background-color: #8b0000;
+}
+
+/* tutorial popup */ 
+/* will be programmatically created and injected in DOM */
+#tutorialPopup {
+    position: absolute;
+    background-color: #fff;
+    top: 150px;
+    border: 2px solid #a9a9a9;
+    border-radius: 15px;
+    padding: 5px;
+    padding-bottom: 10px;
+    -webkit-box-shadow: 0 25px 250px  #ccc, 0 -25px 250px  #ccc;
+    box-shadow: 0 25px 250px  #ccc, 0 -25px 250px  #ccc;
+}
+
+#tutorialPopup h2 {
+    color: #8b0000;
+    margin: 0;
+}
+
+#tutorialButton {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-weight: bolder;
+    background-color: #8b0000;
+    color: #ffffff;
+    border: none;
+    display: inline-block;
+    -webkit-box-shadow: 5px 5px 20px #a9a9a9;
+    box-shadow: 5px 5px 20px #a9a9a9;
+}
+
+label[for="tutorialCheckbox"] {
+    font-weight: bold;
+    color: #8b0000;
 }
