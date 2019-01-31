@@ -47,7 +47,7 @@ function initialize() {
         document.getElementById(url + '-yes').addEventListener('click', setNewTabValue);
         document.getElementById(url + '-no').addEventListener('click', setNewTabValue);
 
-        document.getElementById(url).addEventListener('keypress', handleKeyPress);
+        document.getElementById(url).addEventListener('keyup', handleKeyPress);
     }
 }
 
@@ -107,7 +107,6 @@ function update(event) {
     const id = event.target.id.substring(0, 4);
     const url = document.getElementById(id);
 
-    url.value = "";
     url.placeholder = emptyUrlPlaceholder;
     url.focus();
     handleButtons(id, 'update');
