@@ -1,8 +1,9 @@
 {
     "manifest_version": 2,
     "name": "Rapid Links",
-    "description": "Quickly launch your favorite websites or URLs using keyboard shortcuts",
-    "version": "1.0",
+    "short_name": "Rapid Links",
+    "description": "Quickly Launch Your Favorite Websites or URLs Using Keyboard Shortcuts",
+    "version": "1.1",
     "icons": {
         "128": "icons/icon128.png",
         "48": "icons/icon48.png",
@@ -45,5 +46,6 @@
             },
             "description": "Launch the third URL stored in chrome storage on pressing ALT+N"
         }
-    }
+    },
+    "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'"
 }

@@ -1,3 +1,14 @@
+/* google analytics script */
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-XXXXXXXXX-X']); //tracking id hidden for security reasons
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = 'https://ssl.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+
 function launchUrl(request, n) {
     var link = request['url' + n];
     /* if url field is not set, just ignore the launch request */
@@ -7,6 +18,14 @@ function launchUrl(request, n) {
         } else {
             chrome.tabs.update({ url: link.url });
         }
+
+        /* track events in google analytics */
+        if (n === 1)
+            _gaq.push(['_trackEvent', 'Alt + V', 'launched']);
+        else if (n === 2)
+            _gaq.push(['_trackEvent', 'Alt + B', 'launched']);
+        else
+            _gaq.push(['_trackEvent', 'Alt + N', 'launched']);
     }
 }
 

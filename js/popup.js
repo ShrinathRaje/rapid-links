@@ -1,6 +1,17 @@
 const numberOfRapidLinks = 3;
 const emptyUrlPlaceholder = "Enter URL, e.g: www.example.com";
 
+/* google analytics script */
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-XXXXXXXXX-X']); //tracking id hidden for security reasons
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = 'https://ssl.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+
 /*populate the url fields with values stored in the chrome storage */
 /*add event listeners to all the buttons and input fields like radio buttons */
 function initialize() {
@@ -57,8 +68,9 @@ function initialize() {
             tutorialPopup.setAttribute('id', 'tutorialPopup');
 
             tutorialPopup.innerHTML = '<h2>Welcome!</h2>' +
-                '<p><b>Press and Hold</b> <kbd>Alt</kbd> key, then, <b>Press and immediately Release</b>' +
-                "<kbd> 'V' </kbd> key to launch your firstmost favorite website.</p>" +
+                '<p><b>Press and Hold</b> <kbd>Alt</kbd> key, then, <b>Press and immediately Release </b>' +
+                "the <kbd> 'alphabet' </kbd> key to launch your favorite websites. " +
+                "For e.g: Press <kbd>Alt + B</kbd> To launch YouTube.</p>" +
                 '<input type="checkbox" id="tutorialCheckbox"> <label for="tutorialCheckbox">' +
                 'Do not show this again</label>' +
                 '<button id="tutorialButton">X</button>';
@@ -74,6 +86,10 @@ function initialize() {
             });
         }
     });
+
+    /* Navigation links */
+    document.getElementById('addReview').addEventListener('click', handleNavLinks);
+    document.getElementById('contact').addEventListener('click', handleNavLinks);
 }
 
 /* handle buttons depending on the context of the program */
@@ -133,6 +149,7 @@ function update(event) {
     const url = document.getElementById(id);
 
     url.placeholder = emptyUrlPlaceholder;
+    url.select();
     url.focus();
     handleButtons(id, 'update');
 }
@@ -277,6 +294,12 @@ function handleKeyPress(event) {
         else
             addButton.click();
     }
+}
+
+/* handle clicks on links to external resources */
+function handleNavLinks(event) {
+    const link = event.target.href;
+    chrome.tabs.create({ url: link });
 }
 
 initialize(); //let the game begin

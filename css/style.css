@@ -4,7 +4,7 @@ body {
     font-family: 'Open Sans', sans-serif;
     text-align: center;
     font-size: 16px;
-    min-width: 350px;
+    min-width: 400px;
     background-color: #F7F7F7;
 }
 
@@ -12,6 +12,15 @@ body {
     position: relative;
     width: 95%;
     margin: auto;
+}
+
+header img {
+    width: 25px;
+    height: 25px;
+    float: left;
+    position: relative;
+    top: 10px;
+    left: 85px;
 }
 
 #main-heading {
@@ -122,4 +131,18 @@ button.negative:hover {
 label[for="tutorialCheckbox"] {
     font-weight: bold;
     color: #8b0000;
+}
+
+nav ul li {
+    list-style-type: none;
+    display: inline;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #8b0000;
+}
+
+nav ul li a:hover {
+    color: blue;
 }
